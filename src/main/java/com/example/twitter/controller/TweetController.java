@@ -35,23 +35,18 @@ public class TweetController {
         Tweet tweet = tweetService.createTweet(request.getContent(), user);
         return new ResponseEntity<>(tweet, HttpStatus.CREATED);
     }
-
     public static class TweetRequest {
         private String content;
         private Integer userId;
-
         public String getContent() {
             return content;
         }
-
         public void setContent(String content) {
             this.content = content;
         }
-
         public Integer getUserId() {
             return userId;
         }
-
         public void setUserId(Integer userId) {
             this.userId = userId;
         }
@@ -62,9 +57,5 @@ public class TweetController {
         tweetService.deleteTweet(tweetId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
-
-
-
 
 }
