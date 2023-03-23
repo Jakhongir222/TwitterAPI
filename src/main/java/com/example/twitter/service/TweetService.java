@@ -7,7 +7,6 @@ import com.example.twitter.repository.TweetRepository;
 import com.example.twitter.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

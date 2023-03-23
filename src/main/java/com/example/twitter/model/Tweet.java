@@ -1,7 +1,6 @@
 package com.example.twitter.model;
 
 import jakarta.persistence.*;
-
 import java.util.Date;
 
 @Entity
@@ -26,7 +25,8 @@ public class Tweet {
     @JoinColumn(name = "reply_to")
     private Tweet replyTo;
 
-    public Tweet() {}
+    public Tweet() {
+    }
 
     public Tweet(String content, Date date, User author, Tweet replyTo) {
         this.content = content;

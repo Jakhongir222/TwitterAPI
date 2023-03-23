@@ -2,7 +2,6 @@ package com.example.twitter.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -14,13 +13,13 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="user_id")
+    @Column(name = "user_id")
     private Integer userId;
 
-    @Column(name="first_name")
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name="last_name")
+    @Column(name = "last_name")
     private String lastName;
 
     @Column(unique = true)
@@ -35,21 +34,36 @@ public class User {
     private String phone;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "following",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "following_id")})
+    @JoinTable(name = "following", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "following_id")})
     @JsonIgnore
     private Set<User> following;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "followers",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "follower_id")})
+    @JoinTable(name = "followers", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "follower_id")})
     @JsonIgnore
     private Set<User> followers;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tweet> tweets = new ArrayList<>();
+
+//From here down, security config
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role_junction", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "role_id")})
+    private Set<Role> authorities;
+
+    private boolean enabled;
+
+    @Column(nullable = true)
+    @JsonIgnore
+    private Long verification;
+
+    public User() {
+        this.authorities = new HashSet<>();
+        this.following = new HashSet<>();
+        this.followers = new HashSet<>();
+        this.enabled = false;
+    }
 
     public User(Integer userId) {
         this.userId = userId;
@@ -63,27 +77,6 @@ public class User {
         this.tweets = tweets;
     }
 
-//From here down, security config
-
-    @ManyToMany(fetch=FetchType.EAGER)
-    @JoinTable(name = "user_role_junction",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id")})
-    private Set<Role> authorities;
-
-    private boolean enabled;
-
-    @Column(nullable = true)
-    @JsonIgnore
-    private Long verification;
-
-    public User(){
-        this.authorities= new HashSet<>();
-        this.following= new HashSet<>();
-        this.followers= new HashSet<>();
-        this.enabled = false;
-    }
-
     public boolean isEnabled() {
         return enabled;
     }
@@ -91,6 +84,7 @@ public class User {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
+
     public String getPhone() {
         return phone;
     }

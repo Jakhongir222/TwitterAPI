@@ -4,14 +4,11 @@ import com.example.twitter.exceptions.EmailAlreadyTakenException;
 import com.example.twitter.exceptions.UserDoesNotExistException;
 import com.example.twitter.model.RegistrationObject;
 import com.example.twitter.model.Role;
-import com.example.twitter.model.Tweet;
 import com.example.twitter.model.User;
 import com.example.twitter.repository.RoleRepository;
 import com.example.twitter.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -32,12 +29,12 @@ public class UserService {
         return userRepo.save(user);
     }
 
-    public User getUserByUserName(String username){
+    public User getUserByUserName(String username) {
         return userRepo.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
     }
 
-    public User updateUser(User user){
-        try{
+    public User updateUser(User user) {
+        try {
             return userRepo.save(user);
         } catch (Exception e) {
             throw new EmailAlreadyTakenException();
@@ -68,7 +65,7 @@ public class UserService {
         return new ArrayList<>(following);
     }
 
-    public User registerUser(RegistrationObject object){
+    public User registerUser(RegistrationObject object) {
 
         User user = new User();
         user.setFirstName(object.getFirstName());
@@ -79,41 +76,38 @@ public class UserService {
 
         boolean nameTaken = true;
         String tempName = "";
-        while (nameTaken){
+        while (nameTaken) {
             tempName = generateUsername(name);
-            if(userRepo.findByUsername(tempName).isEmpty()){
+            if (userRepo.findByUsername(tempName).isEmpty()) {
                 nameTaken = false;
             }
         }
-
         user.setUsername(tempName);
 
         Set<Role> roles = user.getAuthorities();
         roles.add(roleRepo.findRoleByAuthority("USER").get());
         user.setAuthorities(roles);
 
-        try{
+        try {
             return userRepo.save(user);
         } catch (Exception e) {
             throw new EmailAlreadyTakenException();
         }
-
     }
 
     public void generateEmailVerification(String username) {
 
-        User user = userRepo.findByUsername(username).orElseThrow(UserDoesNotExistException :: new);
-
+        User user = userRepo.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
         user.setVerification(generateVerificationNumber());
         userRepo.save(user);
     }
 
-    private String generateUsername (String name) {
+    private String generateUsername(String name) {
         long generatedNumber = (long) Math.floor(Math.random() * 1_000_000_000);
         return name + generatedNumber;
     }
 
-    private Long generateVerificationNumber(){
+    private Long generateVerificationNumber() {
         return (long) Math.floor(Math.random() * 100_000_000);
     }
 

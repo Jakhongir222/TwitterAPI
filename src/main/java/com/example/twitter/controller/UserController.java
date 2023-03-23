@@ -1,16 +1,12 @@
 package com.example.twitter.controller;
 
-
 import com.example.twitter.model.User;
 import com.example.twitter.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/users")
@@ -30,7 +26,7 @@ public class UserController {
     }
 
     @PutMapping("/")
-    public User updateUser(@RequestBody User user){
+    public User updateUser(@RequestBody User user) {
         return userService.updateUser(user);
     }
 
@@ -55,5 +51,4 @@ public class UserController {
     ResponseEntity<List<User>> getFollowing(@PathVariable("username") String username) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getFollowing(username));
     }
-
 }

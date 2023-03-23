@@ -1,6 +1,5 @@
 package com.example.twitter.controller;
 
-
 import com.example.twitter.model.Tweet;
 import com.example.twitter.model.User;
 import com.example.twitter.service.TweetService;
@@ -28,9 +27,11 @@ public class TweetController {
         Tweet tweet = tweetService.createTweet(request.getContent(), user);
         return new ResponseEntity<>(tweet, HttpStatus.CREATED);
     }
+
     public static class TweetRequest {
         private String content;
         private Integer userId;
+
         public String getContent() {
             return content;
         }
@@ -50,6 +51,7 @@ public class TweetController {
         tweetService.deleteTweet(tweetId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
     @GetMapping("/{userId}")
     ResponseEntity<List<Tweet>> getTweetsByUser(@PathVariable Integer userId) {
         List<Tweet> tweets = tweetService.getTweetsByUser(userId);
