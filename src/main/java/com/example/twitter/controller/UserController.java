@@ -9,29 +9,46 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
     UserService userService;
 
+    @GetMapping
+    ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUsers());
+    }
 
+    @PostMapping
+    ResponseEntity<User> createUser(@RequestBody User user) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.createUser(user));
+    }
 
     @PutMapping("/")
     public User updateUser(@RequestBody User user){
         return userService.updateUser(user);
     }
 
-    @PutMapping("/follow")
-    public Set<User> followUser (@RequestBody LinkedHashMap<String , String> body, String username){
-        String loggedInUser = String.valueOf(userService.getUserByUserName(username));
-        String followedUser = body.get("followedUser");
-        return userService.followUser(loggedInUser, followedUser);
-
+    @GetMapping("/{username}")
+    ResponseEntity<User> getUserByUsername(@PathVariable String username) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserByUserName(username));
     }
 
+    @PostMapping("/{follower}/follow/{following}")
+    public ResponseEntity<String> followUser(@PathVariable("follower") String follower, @PathVariable("following") String following) {
+        userService.followUser(follower, following);
+        return ResponseEntity.ok("User followed successfully");
+    }
+
+    @PostMapping("/{follower}/unfollow/{following}")
+    public ResponseEntity<String> unfollowUser(@PathVariable("follower") String follower, @PathVariable("following") String following) {
+        userService.unfollowUser(follower, following);
+        return ResponseEntity.ok("User unfollowed successfully");
+    }
 
 }

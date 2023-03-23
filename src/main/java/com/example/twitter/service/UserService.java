@@ -10,6 +10,7 @@ import com.example.twitter.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -20,6 +21,13 @@ public class UserService {
     @Autowired
     RoleRepository roleRepo;
 
+    public List<User> getAllUsers() {
+        return userRepo.findAll();
+    }
+
+    public User createUser(User user) {
+        return userRepo.save(user);
+    }
 
     public User getUserByUserName(String username){
         return userRepo.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
@@ -32,6 +40,25 @@ public class UserService {
             throw new EmailAlreadyTakenException();
         }
     }
+
+    public void followUser(String followerUsername, String followingUsername) {
+        User follower = getUserByUserName(followerUsername);
+        User following = getUserByUserName(followingUsername);
+        follower.getFollowing().add(following);
+        following.getFollowers().add(follower);
+        userRepo.save(follower);
+        userRepo.save(following);
+    }
+
+    public void unfollowUser(String followerUsername, String followingUsername) {
+        User follower = getUserByUserName(followerUsername);
+        User following = getUserByUserName(followingUsername);
+        follower.getFollowing().remove(following);
+        following.getFollowers().remove(follower);
+        userRepo.save(follower);
+        userRepo.save(following);
+    }
+
 
     public User registerUser(RegistrationObject object){
 
@@ -80,24 +107,6 @@ public class UserService {
 
     private Long generateVerificationNumber(){
         return (long) Math.floor(Math.random() * 100_000_000);
-    }
-
-    public Set<User> followUser(String user, String followee ){
-        User loggedInUser = userRepo.findByUsername(user).orElseThrow(UserDoesNotExistException :: new);
-        Set<User> followingList = loggedInUser.getFollowing();
-        User followedUser = userRepo.findByUsername(followee).orElseThrow(UserDoesNotExistException :: new);
-        Set<User> followerList = followedUser.getFollowers();
-
-        followingList.add(followedUser);
-        loggedInUser.setFollowing(followingList);
-
-        followerList.add(loggedInUser);
-        followedUser.setFollowers(followerList);
-
-        userRepo.save(loggedInUser);
-        userRepo.save(followedUser);
-
-        return loggedInUser.getFollowing();
     }
 
 }
