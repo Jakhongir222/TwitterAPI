@@ -1,0 +1,103 @@
+package com.example.twitter.service;
+
+import com.example.twitter.exceptions.EmailAlreadyTakenException;
+import com.example.twitter.exceptions.UserDoesNotExistException;
+import com.example.twitter.model.RegistrationObject;
+import com.example.twitter.model.Role;
+import com.example.twitter.model.User;
+import com.example.twitter.repository.RoleRepository;
+import com.example.twitter.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Set;
+
+@Service
+public class UserService {
+
+    @Autowired
+    UserRepository userRepo;
+    @Autowired
+    RoleRepository roleRepo;
+
+
+    public User getUserByUserName(String username){
+        return userRepo.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
+    }
+
+    public User updateUser(User user){
+        try{
+            return userRepo.save(user);
+        } catch (Exception e) {
+            throw new EmailAlreadyTakenException();
+        }
+    }
+
+    public User registerUser(RegistrationObject object){
+
+        User user = new User();
+        user.setFirstName(object.getFirstName());
+        user.setLastName(object.getLastName());
+        user.setEmail(object.getEmail());
+
+        String name = user.getFirstName() + user.getLastName();
+
+        boolean nameTaken = true;
+        String tempName = "";
+        while (nameTaken){
+            tempName = generateUsername(name);
+            if(userRepo.findByUsername(tempName).isEmpty()){
+                nameTaken = false;
+            }
+        }
+
+        user.setUsername(tempName);
+
+        Set<Role> roles = user.getAuthorities();
+        roles.add(roleRepo.findRoleByAuthority("USER").get());
+        user.setAuthorities(roles);
+
+        try{
+            return userRepo.save(user);
+        } catch (Exception e) {
+            throw new EmailAlreadyTakenException();
+        }
+
+    }
+
+    public void generateEmailVerification(String username) {
+
+        User user = userRepo.findByUsername(username).orElseThrow(UserDoesNotExistException :: new);
+
+        user.setVerification(generateVerificationNumber());
+        userRepo.save(user);
+    }
+
+    private String generateUsername (String name) {
+        long generatedNumber = (long) Math.floor(Math.random() * 1_000_000_000);
+        return name + generatedNumber;
+    }
+
+    private Long generateVerificationNumber(){
+        return (long) Math.floor(Math.random() * 100_000_000);
+    }
+
+    public Set<User> followUser(String user, String followee ){
+        User loggedInUser = userRepo.findByUsername(user).orElseThrow(UserDoesNotExistException :: new);
+        Set<User> followingList = loggedInUser.getFollowing();
+        User followedUser = userRepo.findByUsername(followee).orElseThrow(UserDoesNotExistException :: new);
+        Set<User> followerList = followedUser.getFollowers();
+
+        followingList.add(followedUser);
+        loggedInUser.setFollowing(followingList);
+
+        followerList.add(loggedInUser);
+        followedUser.setFollowers(followerList);
+
+        userRepo.save(loggedInUser);
+        userRepo.save(followedUser);
+
+        return loggedInUser.getFollowing();
+    }
+
+}
