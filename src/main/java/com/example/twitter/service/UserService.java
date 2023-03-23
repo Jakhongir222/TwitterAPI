@@ -4,10 +4,12 @@ import com.example.twitter.exceptions.EmailAlreadyTakenException;
 import com.example.twitter.exceptions.UserDoesNotExistException;
 import com.example.twitter.model.RegistrationObject;
 import com.example.twitter.model.Role;
+import com.example.twitter.model.Tweet;
 import com.example.twitter.model.User;
 import com.example.twitter.repository.RoleRepository;
 import com.example.twitter.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -113,5 +115,9 @@ public class UserService {
 
     private Long generateVerificationNumber(){
         return (long) Math.floor(Math.random() * 100_000_000);
+    }
+
+    public User getUserById(Integer userId) {
+        return userRepo.findById(userId).orElse(null);
     }
 }

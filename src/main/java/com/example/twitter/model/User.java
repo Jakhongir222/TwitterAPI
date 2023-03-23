@@ -3,7 +3,9 @@ package com.example.twitter.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -46,7 +48,22 @@ public class User {
     @JsonIgnore
     private Set<User> followers;
 
-    //From here down, security config
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Tweet> tweets = new ArrayList<>();
+
+    public User(Integer userId) {
+        this.userId = userId;
+    }
+
+    public List<Tweet> getTweets() {
+        return tweets;
+    }
+
+    public void setTweets(List<Tweet> tweets) {
+        this.tweets = tweets;
+    }
+
+//From here down, security config
 
     @ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(name = "user_role_junction",
