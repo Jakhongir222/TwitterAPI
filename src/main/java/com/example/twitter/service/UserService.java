@@ -10,6 +10,7 @@ import com.example.twitter.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -59,6 +60,11 @@ public class UserService {
         userRepo.save(following);
     }
 
+    public List<User> getFollowing(String username) {
+        User user = getUserByUserName(username);
+        Set<User> following = user.getFollowing();
+        return new ArrayList<>(following);
+    }
 
     public User registerUser(RegistrationObject object){
 
@@ -108,5 +114,4 @@ public class UserService {
     private Long generateVerificationNumber(){
         return (long) Math.floor(Math.random() * 100_000_000);
     }
-
 }

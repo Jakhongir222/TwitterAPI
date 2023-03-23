@@ -51,4 +51,9 @@ public class UserController {
         return ResponseEntity.ok("User unfollowed successfully");
     }
 
+    @GetMapping("/{username}/following")
+    ResponseEntity<List<User>> getFollowing(@PathVariable("username") String username) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getFollowing(username));
+    }
+
 }
