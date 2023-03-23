@@ -1,12 +1,14 @@
 package com.example.twitter.service;
 
-import com.example.twitter.exceptions.ResourceNotFoundException;
+import com.example.twitter.exceptions.UserDoesNotExistException;
 import com.example.twitter.model.Tweet;
 import com.example.twitter.model.User;
 import com.example.twitter.repository.TweetRepository;
 import com.example.twitter.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,11 +25,6 @@ public class TweetService {
         return tweetRepo.findAll();
     }
 
-    public List<Tweet> getTweetsByUser(Integer userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
-        return tweetRepo.findByUser(user);
-    }
-
     public Tweet createTweet(String content, User user) {
         Tweet tweet = new Tweet();
         tweet.setContent(content);
@@ -40,5 +37,15 @@ public class TweetService {
         tweetRepo.deleteById(tweetId);
     }
 
+    public List<Tweet> getTweetsByUser(Integer userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            throw new UserDoesNotExistException();
+        }
+        List<User> users = new ArrayList<>();
+        users.add(user);
+        users.addAll(user.getFollowing());
+        return tweetRepo.findByUserInAndReplyToIsNotNull(users);
+    }
 }
 

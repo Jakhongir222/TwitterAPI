@@ -22,13 +22,6 @@ public class TweetController {
         return ResponseEntity.status(HttpStatus.OK).body(tweetService.getAllTweets());
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Tweet>> getTweetsByUser(@PathVariable("userId") Integer userId) {
-        User user = new User(userId);
-        List<Tweet> tweets = tweetService.getTweetsByUser(user.getUserId());
-        return new ResponseEntity<>(tweets, HttpStatus.OK);
-    }
-
     @PostMapping
     public ResponseEntity<Tweet> createTweet(@RequestBody TweetRequest request) {
         User user = new User(request.getUserId());
@@ -57,5 +50,9 @@ public class TweetController {
         tweetService.deleteTweet(tweetId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
+    @GetMapping("/{userId}")
+    ResponseEntity<List<Tweet>> getTweetsByUser(@PathVariable Integer userId) {
+        List<Tweet> tweets = tweetService.getTweetsByUser(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(tweets);
+    }
 }
