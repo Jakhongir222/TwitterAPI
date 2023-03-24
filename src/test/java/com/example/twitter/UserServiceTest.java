@@ -98,5 +98,4 @@ public class UserServiceTest {
         // Assert
         assertThat(result).isEqualTo(user);
     }
-
 }
