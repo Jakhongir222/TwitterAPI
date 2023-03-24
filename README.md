@@ -5,9 +5,9 @@ This is a nifty little app that provides convenient functionality for interactin
 But wait, there's more! I'm especially passionate about authentication, and I've implemented a login feature for users. Unfortunately, I wasn't able to fully finish it due to my Google Cloud credit running out on the free tier. Fear not, though! I plan on replacing it with Okta very soon 😉
 
 ## Deployment
-The app has been deployed on Railway, making it easily accessible for others to use and test. You can check out the app by following the link below. Go ahead, give it a spin and let me know what you think! 
+The app has been deployed on Railway, making it easily accessible for others to use and test. You can check out the app by following the link below. Don't forget to add the endpoints specified below. Go ahead, give it a spin and let me know what you think! 
 
-Link: <insert link here>
+Link: https://twitterapi-production.up.railway.app
 
 ## Installation
 
