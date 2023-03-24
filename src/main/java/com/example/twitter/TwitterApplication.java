@@ -18,6 +18,12 @@ public class TwitterApplication {
         SpringApplication.run(TwitterApplication.class, args);
     }
 
+
+    /*
+
+    This is the function that automatically adds a default user using CommandLineRunner,
+    Uncomment it if you want to see how it works
+
     @Bean
     CommandLineRunner run(RoleRepository roleRepo, UserRepository userRepository) {
         return args -> {
@@ -34,7 +40,7 @@ public class TwitterApplication {
             user.setEnabled(true);
             userRepository.save(user);
         };
-    }
+    } */
 }
 
 
