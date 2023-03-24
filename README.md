@@ -5,7 +5,7 @@ This is a nifty little app that provides convenient functionality for interactin
 But wait, there's more! I'm especially passionate about authentication, and I've implemented a login feature for users. Unfortunately, I wasn't able to fully finish it due to my Google Cloud credit running out on the free tier. Fear not, though! I plan on replacing it with Okta very soon 😉
 
 ## Deployment
-The app has been deployed on Railway, making it easily accessible for others to use and test. You can check out the app by following the link below. Don't forget to add the endpoints specified below. Go ahead, give it a spin and let me know what you think! 
+The app has been deployed on Railway, making it easily accessible for others to use and test. You can check out the app by following the link below and use the endpoints specified to explore its features. Give it a spin and let me know your thoughts! 
 
 Link: https://twitterapi-production.up.railway.app
 
@@ -25,7 +25,7 @@ To get started, follow these steps:
 
 ## Usage
 
-The app offers RESTful endpoints to interact with the Twitter API. Upon running the app, an automatic default user, Jakhongir Burkhonov, is created - that's me! This makes it easier to test the app, but don't forget to create your own users and follow me too :). I have a method that generates auotamatic usernames just like Twitter. Check out some examples below on how to use these endpoints:
+The app offers RESTful endpoints to interact with the Twitter API. Upon running the app, an automatic default user, Jakhongir Burkhonov, is created (that's me) This makes it easier to test the app, but don't forget to create your own users and follow me too! I have a method that generates auotamatic usernames just like Twitter. Take a look at the examples below to learn how to use these endpoints on your local machine. Alternatively, you can grab the link above and test out the endpoints:
 
 
 
@@ -193,7 +193,7 @@ All of the endpoints have been tested using Postman. In addition, Automated test
 
 ## Thank You
 
-Thank you for taking the time to read through my readme! I appreciate your interest in my project and hope you found it informative and useful.
+Thank you for taking the time to read through my readme! I really appreciate your interest in my project and hope you found it informative and useful.
 
  
 If you have any feedback, suggestions, or just want to say hi, feel free to reach out to me. I'm always open to new ideas and love connecting with like-minded people.
