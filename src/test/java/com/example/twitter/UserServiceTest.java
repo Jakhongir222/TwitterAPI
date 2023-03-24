@@ -1,7 +1,6 @@
 package com.example.twitter;
 
 import com.example.twitter.model.User;
-import com.example.twitter.repository.RoleRepository;
 import com.example.twitter.repository.UserRepository;
 import com.example.twitter.service.UserService;
 import org.junit.jupiter.api.Test;
