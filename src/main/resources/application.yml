@@ -20,7 +20,7 @@ spring:
     generate-ddl: true
     defer-datasource-initialization: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
 logging:
   level:
     org:
